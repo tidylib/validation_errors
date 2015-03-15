@@ -17,4 +17,15 @@ RSpec.describe Tidylib::ValidationErrors do
       expect(errors.empty?).to be_falsey
     end
   end
+
+  describe "#[]" do
+    it "returns errors for a topic" do
+      errors = described_class.new
+      errors.add(:foo, :presence)
+      errors.add(:baz, :length)
+
+      expect(errors[:foo]).to eq(:presence)
+      expect(errors[:baz]).to eq(:length)
+    end
+  end
 end

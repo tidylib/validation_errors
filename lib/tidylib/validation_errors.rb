@@ -3,16 +3,19 @@ module Tidylib
     VERSION = "0.1.0"
 
     def initialize
-      @empty = true
-
+      @errors = Hash.new
     end
 
     def empty?
-      @empty
+      @errors.empty?
     end
 
     def add(topic, message)
-      @empty = false
+      @errors[topic] = message
+    end
+
+    def [](topic)
+      @errors[topic]
     end
   end
 end
