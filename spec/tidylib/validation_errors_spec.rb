@@ -37,6 +37,25 @@ RSpec.describe Tidylib::ValidationErrors do
     end
   end
 
+  describe "#on" do
+    it "returns errors for a topic" do
+      errors = described_class.new
+      errors.add(:foo, :presence)
+      errors.add(:baz, :length)
+
+      expect(errors.on(:foo)).to include(:presence)
+      expect(errors.on(:baz)).to include(:length)
+    end
+
+    it "allows multiple errors on a topic" do
+      errors = described_class.new
+      errors.add(:foo, :presence)
+      errors.add(:foo, :length)
+
+      expect(errors.on(:foo)).to eq([:presence, :length])
+    end
+  end
+
   describe "#each" do
     it "iterates over all the errors" do
       errors = described_class.new

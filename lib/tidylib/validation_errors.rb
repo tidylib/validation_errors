@@ -21,6 +21,7 @@ module Tidylib
         error.first == topic
       end.map(&:last)
     end
+    alias :on :[]
 
     def each(&blk)
       @errors.each(&blk)
