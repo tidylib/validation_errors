@@ -1,7 +1,5 @@
-require "tidylib/validation_errors/version"
-
 module Tidylib
-  module ValidationErrors
-    # Your code goes here...
+  class ValidationErrors
+    VERSION = "0.1.0"
   end
 end
