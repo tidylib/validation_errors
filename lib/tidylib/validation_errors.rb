@@ -11,7 +11,8 @@ module Tidylib
     end
 
     def add(topic, message)
-      @errors[topic] = message
+      @errors[topic] ||= []
+      @errors[topic] << message
     end
 
     def [](topic)
