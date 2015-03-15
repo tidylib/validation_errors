@@ -26,5 +26,14 @@ module Tidylib
     def each(&blk)
       @errors.each(&blk)
     end
+
+    def grouped_by_topic
+      @errors.inject({}) do |grouped, error|
+        grouped[error.first] ||= []
+        grouped[error.first] << error.last
+
+        grouped
+      end
+    end
   end
 end

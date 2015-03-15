@@ -90,4 +90,19 @@ RSpec.describe Tidylib::ValidationErrors do
       expect(actual).to eq( [ [ :foo, :length ] , [ :foo, :presence ] ] )
     end
   end
+
+  describe "#grouped_by_topic" do
+    it "returns the errors grouped by topic" do
+      errors = described_class.new
+      errors.add(:foo, :length)
+      errors.add(:bar, :presence)
+      errors.add(:foo, :presence)
+
+      grouped_errors = errors.grouped_by_topic
+
+      expect(grouped_errors.keys).to eq([:foo, :bar])
+      expect(grouped_errors[:foo]).to eq([:length, :presence])
+      expect(grouped_errors[:bar]).to eq([:presence])
+    end
+  end
 end
