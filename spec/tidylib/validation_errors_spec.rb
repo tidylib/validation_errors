@@ -55,6 +55,20 @@ RSpec.describe Tidylib::ValidationErrors do
         [ :foo, :length ]
       ])
     end
+  end
 
+  describe "Enumerable integration" do
+    it "Enumerable additions #map" do
+      errors = described_class.new
+      errors.add(:foo, :length)
+      errors.add(:bar, :presence)
+      errors.add(:foo, :presence)
+
+      actual = errors.select do |topic, message|
+        topic == :foo
+      end
+
+      expect(actual).to eq( [ [ :foo, :length ] , [ :foo, :presence ] ] )
+    end
   end
 end

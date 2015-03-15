@@ -1,5 +1,7 @@
 module Tidylib
   class ValidationErrors
+    include Enumerable
+
     VERSION = "0.1.0"
 
     def initialize
