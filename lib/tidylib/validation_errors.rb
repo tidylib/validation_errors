@@ -3,7 +3,7 @@ module Tidylib
     VERSION = "0.1.0"
 
     def initialize
-      @errors = Hash.new
+      @errors = []
     end
 
     def empty?
@@ -11,12 +11,17 @@ module Tidylib
     end
 
     def add(topic, message)
-      @errors[topic] ||= []
-      @errors[topic] << message
+      @errors << [ topic, message ]
     end
 
     def [](topic)
-      @errors[topic]
+      @errors.select do |error|
+        error.first == topic
+      end.map(&:last)
+    end
+
+    def each(&blk)
+      @errors.each(&blk)
     end
   end
 end

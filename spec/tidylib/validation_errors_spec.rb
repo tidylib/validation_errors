@@ -36,4 +36,25 @@ RSpec.describe Tidylib::ValidationErrors do
       expect(errors[:foo]).to eq([:presence, :length])
     end
   end
+
+  describe "#each" do
+    it "iterates over all the errors" do
+      errors = described_class.new
+      errors.add(:foo, :presence)
+      errors.add(:bar, :presence)
+      errors.add(:foo, :length)
+
+      actual = []
+      errors.each do |topic, message|
+        actual << [topic, message]
+      end
+
+      expect(actual).to eq([
+        [ :foo, :presence ],
+        [ :bar, :presence],
+        [ :foo, :length ]
+      ])
+    end
+
+  end
 end
