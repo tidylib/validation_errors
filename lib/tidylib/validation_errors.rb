@@ -1,3 +1,5 @@
+require 'ostruct'
+
 module Tidylib
   class ValidationErrors
     include Enumerable
@@ -12,25 +14,35 @@ module Tidylib
       @errors.empty?
     end
 
-    def add(topic, message)
-      @errors << [ topic, message ]
+    def add(topic, message, context={})
+      error = OpenStruct.new(
+        topic: topic,
+        message: message,
+        context: context
+      )
+
+      @errors << error
     end
 
     def [](topic)
       @errors.select do |error|
-        error.first == topic
-      end.map(&:last)
+        error.topic == topic
+      end.map do |error|
+        [ error.message, error.context ]
+      end
     end
     alias :on :[]
 
     def each(&blk)
-      @errors.each(&blk)
+      @errors.each do |error|
+        yield error.topic, error.message, error.context
+      end
     end
 
     def grouped_by_topic
       @errors.inject({}) do |grouped, error|
-        grouped[error.first] ||= []
-        grouped[error.first] << error.last
+        grouped[error.topic] ||= []
+        grouped[error.topic] << [error.message, error.context]
 
         grouped
       end

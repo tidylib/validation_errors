@@ -24,8 +24,12 @@ RSpec.describe Tidylib::ValidationErrors do
       errors.add(:foo, :presence)
       errors.add(:baz, :length)
 
-      expect(errors[:foo]).to include(:presence)
-      expect(errors[:baz]).to include(:length)
+      expect(errors[:foo]).to eq([
+        [:presence, {}]
+      ])
+      expect(errors[:baz]).to eq([
+        [:length, {}]
+      ])
     end
 
     it "allows multiple errors on a topic" do
@@ -33,26 +37,10 @@ RSpec.describe Tidylib::ValidationErrors do
       errors.add(:foo, :presence)
       errors.add(:foo, :length)
 
-      expect(errors[:foo]).to eq([:presence, :length])
-    end
-  end
-
-  describe "#on" do
-    it "returns errors for a topic" do
-      errors = described_class.new
-      errors.add(:foo, :presence)
-      errors.add(:baz, :length)
-
-      expect(errors.on(:foo)).to include(:presence)
-      expect(errors.on(:baz)).to include(:length)
-    end
-
-    it "allows multiple errors on a topic" do
-      errors = described_class.new
-      errors.add(:foo, :presence)
-      errors.add(:foo, :length)
-
-      expect(errors.on(:foo)).to eq([:presence, :length])
+      expect(errors[:foo]).to eq([
+        [ :presence, {} ],
+        [ :length, {} ]
+      ])
     end
   end
 
@@ -87,7 +75,7 @@ RSpec.describe Tidylib::ValidationErrors do
         topic == :foo
       end
 
-      expect(actual).to eq( [ [ :foo, :length ] , [ :foo, :presence ] ] )
+      expect(actual).to eq( [ [ :foo, :length, {} ] , [ :foo, :presence, {} ] ] )
     end
   end
 
@@ -101,8 +89,24 @@ RSpec.describe Tidylib::ValidationErrors do
       grouped_errors = errors.grouped_by_topic
 
       expect(grouped_errors.keys).to eq([:foo, :bar])
-      expect(grouped_errors[:foo]).to eq([:length, :presence])
-      expect(grouped_errors[:bar]).to eq([:presence])
+      expect(grouped_errors[:foo]).to eq([
+        [:length, {}],
+        [:presence, {}]
+      ])
+      expect(grouped_errors[:bar]).to eq([
+        [:presence, {}]
+      ])
+    end
+  end
+
+  describe "context" do
+    it "allows errors to be set with context" do
+      errors = described_class.new
+      errors.add(:foo, :age_limit, { required_age: 21 })
+
+      expect(errors.on(:foo)).to eq([
+        [:age_limit, { required_age: 21 }]
+      ])
     end
   end
 end
