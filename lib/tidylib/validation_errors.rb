@@ -51,5 +51,9 @@ module Tidylib
     def clear
       @errors = []
     end
+
+    def count
+      @errors.length
+    end
   end
 end

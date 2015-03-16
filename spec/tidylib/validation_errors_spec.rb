@@ -119,4 +119,20 @@ RSpec.describe Tidylib::ValidationErrors do
       expect(errors.empty?).to be_truthy
     end
   end
+
+  describe "#count" do
+    it "returns the total number of errors added" do
+      errors = described_class.new
+      expect(errors.count).to eq 0
+
+      errors.add(:foo, :present)
+      expect(errors.count).to eq 1
+
+      errors.add(:bar, :present)
+      expect(errors.count).to eq 2
+
+      errors.add(:bar, :length)
+      expect(errors.count).to eq 3
+    end
+  end
 end
