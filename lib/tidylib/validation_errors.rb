@@ -47,5 +47,9 @@ module Tidylib
         grouped
       end
     end
+
+    def clear
+      @errors = []
+    end
   end
 end

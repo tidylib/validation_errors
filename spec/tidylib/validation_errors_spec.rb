@@ -109,4 +109,14 @@ RSpec.describe Tidylib::ValidationErrors do
       ])
     end
   end
+
+  describe "#clear" do
+    it "clears all the errors" do
+      errors = described_class.new
+      errors.add(:foo, :age_limit)
+      expect(errors.empty?).to be_falsey
+      errors.clear
+      expect(errors.empty?).to be_truthy
+    end
+  end
 end
