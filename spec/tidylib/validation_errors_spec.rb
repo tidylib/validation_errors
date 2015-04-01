@@ -135,4 +135,34 @@ RSpec.describe Tidylib::ValidationErrors do
       expect(errors.count).to eq 3
     end
   end
+
+  describe "#<<" do
+    it "raise error if passed in error does not respond to #topic" do
+      errors = described_class.new
+      error = OpenStruct.new(message: :blank, context: { value: 1 } )
+      expect { errors <<  error }.to raise_error
+    end
+
+    it "raise error if passed in error does not respond to #message" do
+      errors = described_class.new
+      error = OpenStruct.new(topic: :foo, context: { value: 1 } )
+      expect { errors <<  error }.to raise_error
+    end
+
+    it "raise error if passed in error does not respond to #message" do
+      errors = described_class.new
+      error = OpenStruct.new(topic: :foo, message: :blank)
+      expect { errors <<  error }.to raise_error
+    end
+
+    it "stores the error" do
+      errors = described_class.new
+      error = OpenStruct.new(topic: :foo, message: :blank, context: { value: 1 })
+
+      expect(errors.count).to be 0
+      errors << error
+
+      expect(errors.count).to be 1
+    end
+  end
 end

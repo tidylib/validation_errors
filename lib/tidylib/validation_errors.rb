@@ -4,7 +4,7 @@ module Tidylib
   class ValidationErrors
     include Enumerable
 
-    VERSION = "0.1.0"
+    VERSION = "0.1.1"
 
     def initialize
       @errors = []
@@ -54,6 +54,11 @@ module Tidylib
 
     def count
       @errors.length
+    end
+
+    def <<(error)
+      raise ArgumentError unless error.respond_to?(:topic) && error.respond_to?(:message) && error.respond_to?(:context)
+      @errors << error
     end
   end
 end
